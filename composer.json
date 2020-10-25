@@ -1,0 +1,26 @@
+{
+    "name": "isadmin/jinritemai",
+    "description": "今日特卖sdk",
+    "keywords": [
+        "jinritemai",
+        "sdk"
+    ],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "isadmin",
+            "email": "dev@isadmin.cn"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "guzzlehttp/guzzle": "^7.2",
+        "pimple/pimple": "^3.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "isadmin\\Jinritemai\\": "src"
+        }
+    }
+}
