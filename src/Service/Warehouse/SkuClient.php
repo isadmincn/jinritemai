@@ -12,7 +12,7 @@ class SkuClient extends BaseClient
     /**
      * @var string
      */
-    protected $name = 'warehouse.sku';
+    protected $name = 'sku';
 
     public function stockNum()
     {

@@ -14,9 +14,9 @@ class SpecClient extends BaseClient
      */
     protected $name = 'spec';
 
-    public function add()
+    public function add($specs, $name)
     {
-
+        return $this->httpGet('spec/add');
     }
 
     public function specDetail()

@@ -67,16 +67,27 @@ abstract class BaseClient
     }
 
     /**
-     * @param array $arr
+     * @param array $params  参数数组，该数组只可能是一维数组
      * @return string
      * @throws JsonException
      */
-    protected function buildParameterJson(array $arr)
+    protected function buildParameterJson(array $params)
     {
-        if (!$result = json_encode($this->sortByKey($arr), JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE)) {
-            throw new JsonException;
+        $params = array_map(function ($item) {
+            return (string)$item;
+        }, $params);
+        
+        if (empty($params)) {
+            return '{}';
         }
-        return $result;
+
+        ksort($params);
+        $jsonStr = json_encode($params, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $jsonStr = str_replace('&', '\u0026', $jsonStr);
+        $jsonStr = str_replace('<', '\u003c', $jsonStr);
+        $jsonStr = str_replace('>', '\u00ce', $jsonStr);
+
+        return $jsonStr;
     }
 
     /**
@@ -123,7 +134,7 @@ abstract class BaseClient
 
         $options ['base_uri'] = $request['base_uri'];
         $options ['timeout'] = $request['timeout'];
-
+print_r($options);
         try {
             $response = $this->getHttpClient()->request($method, $url, $options);
         } catch (GuzzleException $e) {
@@ -149,5 +160,19 @@ abstract class BaseClient
             $this->httpClient = new Client();
         }
         return $this->httpClient;
+    }
+
+    public function __call($name, $arguments)
+    {
+        $path = $this->name . '/' . $name;
+        $query = [];
+        if (isset($arguments[0])) {
+            // 先校验必选参数是否都有设置
+            $query = $arguments;
+            if (isset($arguments[1])) {
+
+            }
+        }
+        return $this->httpGet($path, $query);
     }
 }

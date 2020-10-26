@@ -12,7 +12,7 @@ class AfterSaleClient extends BaseClient
     /**
      * @var string
      */
-    protected $name = 'shop';
+    protected $name = 'afterSale';
 
     public function orderList()
     {

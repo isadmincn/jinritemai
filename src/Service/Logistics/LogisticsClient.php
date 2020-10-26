@@ -12,7 +12,7 @@ class LogisticsClient extends BaseClient
     /**
      * @var string
      */
-    protected $name = 'logistics';
+    protected $name = 'order';
 
     public function companyList()
     {
