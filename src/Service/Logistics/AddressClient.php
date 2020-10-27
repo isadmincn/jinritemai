@@ -14,18 +14,42 @@ class AddressClient extends BaseClient
      */
     protected $name = 'address';
 
-    public function provinceList()
+    /**
+     * 获取省列表
+     *
+     * @return array
+     * @link https://op.jinritemai.com/docs/api-docs/16/101
+     */
+    public function provinceList() : array
     {
-
+        return $this->httpGet('address/provinceList');
     }
 
-    public function cityList()
+    /**
+     * 获取市列表
+     *
+     * @param integer $province_id 省id
+     * @return array
+     * @link https://op.jinritemai.com/docs/api-docs/16/102
+     */
+    public function cityList(int $province_id) : array
     {
-
+        return $this->httpGet('address/cityList', [
+            'province_id' => $province_id,
+        ]);
     }
 
-    public function areaList()
+    /**
+     * 获取区列表
+     *
+     * @param integer $city_id  市id
+     * @return array
+     * @link https://op.jinritemai.com/docs/api-docs/16/103
+     */
+    public function areaList(int $city_id) : array
     {
-        
+        return $this->httpGet('address/areaList', [
+            'city_id' => $city_id,
+        ]);
     }
 }
