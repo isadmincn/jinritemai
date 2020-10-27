@@ -74,7 +74,7 @@ abstract class BaseClient
     protected function buildParameterJson(array $params)
     {
         $params = array_map(function ($item) {
-            return (string)$item;
+            return is_bool($item) ? $item : (string)$item;
         }, $params);
         
         if (empty($params)) {

@@ -22,8 +22,9 @@ class ProductClient extends BaseClient
      * @param string $product_id  商品id
      * @param string $show_draft  "true"：读取草稿数据；"false"：读取上架数据
      * @return array
+     * @link https://op.jinritemai.com/docs/api-docs/14/56
      */
-    public function detail($product_id, $show_draft = 'false')
+    public function detail(int $product_id, string $show_draft = 'false') : array
     {
         return $this->httpGet('product/detail', [
             'product_id' => $product_id,
@@ -34,11 +35,13 @@ class ProductClient extends BaseClient
     /**
      * 商品列表
      *
-     * @param integer $page          页码，默认0
-     * @param integer $size          每页数量，默认10
+     * @param integer $page    页码，默认0
+     * @param integer $size    每页数量，默认10
+     * @param array   $options 可选参数，status商品上下架状态，check_status商品审核状态
      * @return array
+     * @link https://op.jinritemai.com/docs/api-docs/14/57
      */
-    public function list($page = 0, $size = 10, $options = [])
+    public function list(int $page = 0, int $size = 10, array $options = []) : array
     {
         $query = compact('page', 'size');
         $options = array_pick($options, ['status', 'check_status']);
@@ -50,9 +53,10 @@ class ProductClient extends BaseClient
      * 获取商品分类列表
      *
      * @param integer $cid  父分类id，顶级分类的父分类id为0
-     * @return void
+     * @return array
+     * @link https://op.jinritemai.com/docs/api-docs/14/58
      */
-    public function getGoodsCategory($cid = 0)
+    public function getGoodsCategory(int $cid = 0) : array
     {
         return $this->httpGet('product/getGoodsCategory', [
             'cid' => $cid,
@@ -76,9 +80,10 @@ class ProductClient extends BaseClient
      * @param $pay_type        支付方式
      * @param array $options          可选选项
      * @return array
+     * @link https://op.jinritemai.com/docs/api-docs/14/59
      */
-    public function add($name, $pic, $description, $market_price, $discount_price, $first_cid, 
-        $second_cid, $third_cid, $spec_id, $weight, $product_format, $pay_type, array $options = [])
+    public function add(string $name, string $pic, string $description, int $market_price, int $discount_price, int $first_cid, 
+        int $second_cid, int $third_cid, int $spec_id, int $weight, string $product_format, int $pay_type, array $options = []) : array
     {
         // 必选参数构造查询数组
         $query = compact('name', 'pic', 'description', 'market_price', 'discount_price', 'first_cid', 
@@ -99,8 +104,9 @@ class ProductClient extends BaseClient
      * @param integer $product_id
      * @param array $options
      * @return array
+     * @link https://op.jinritemai.com/docs/api-docs/14/60
      */
-    public function edit(int $product_id, array $options = [])
+    public function edit(int $product_id, array $options = []) : array
     {
         $options = array_pick($options, [
             'name', 'spec_id', 'pic', 'description', 'first_cid', 'second_cid', 'third_cid',
@@ -117,8 +123,9 @@ class ProductClient extends BaseClient
      *
      * @param integer $product_id
      * @return array
+     * @link https://op.jinritemai.com/docs/api-docs/14/61
      */
-    public function del(int $product_id)
+    public function del(int $product_id) : array
     {
         return $this->httpGet('product/del', [
             'product_id' => $product_id,
@@ -133,8 +140,9 @@ class ProductClient extends BaseClient
      * @param integer $second_cid  二级分类id
      * @param integer $third_cid   三级分类id
      * @return array
+     * @link https://op.jinritemai.com/docs/api-docs/14/94
      */
-    public function getCateProperty($first_cid, $second_cid, $third_cid)
+    public function getCateProperty(int $first_cid, int $second_cid, int $third_cid) : array
     {
         return $this->httpGet('product/getCateProperty', compact('first_cid', 'second_cid', 'third_cid'));
     }

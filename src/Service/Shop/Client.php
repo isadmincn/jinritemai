@@ -18,8 +18,7 @@ class Client extends BaseClient
      * 获取店铺的已授权品牌列表
      * 
      * @return array
-     * @throws \isadmin\Jinritemai\Exception\HttpRequestException
-     * @throws \isadmin\Jinritemai\Exception\JsonException
+     * @link https://op.jinritemai.com/docs/api-docs/13/54
      */
     public function brandList()
     {
