@@ -14,12 +14,12 @@ class RefundClient extends BaseClient
      */
     protected $name = 'refund';
 
-    public function orderList()
+    public function orderList() : array
     {
 
     }
 
-    public function shopRefund()
+    public function shopRefund() : array
     {
         
     }

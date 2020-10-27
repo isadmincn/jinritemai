@@ -14,37 +14,37 @@ class AfterSaleClient extends BaseClient
      */
     protected $name = 'afterSale';
 
-    public function orderList()
+    public function orderList() : array
     {
 
     }
 
-    public function buyerReturn()
+    public function buyerReturn() : array
     {
 
     }
 
-    public function firmReceive()
+    public function firmReceive() : array
     {
 
     }
 
-    public function uploadCompensation()
+    public function uploadCompensation() : array
     {
 
     }
 
-    public function addOrderRemark()
+    public function addOrderRemark() : array
     {
 
     }
 
-    public function refundProcessDetail()
+    public function refundProcessDetail() : array
     {
 
     }
 
-    public function buyerRefund()
+    public function buyerRefund() : array
     {
         
     }
