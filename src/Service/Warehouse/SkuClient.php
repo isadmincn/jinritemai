@@ -21,6 +21,6 @@ class SkuClient extends BaseClient
 
     public function syncStock()
     {
-        
+
     }
 }

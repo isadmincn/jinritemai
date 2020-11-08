@@ -1,6 +1,7 @@
 <?php
 namespace isadmin\Jinritemai\Kernel;
 
+use isadmin\Jinritemai\Enum\AppType;
 use isadmin\Jinritemai\Exception\BaseException;
 use Pimple\Container;
 
@@ -13,12 +14,7 @@ class ServiceContainer extends Container
     /**
      * @var array
      */
-    protected $defaultConfig = [];
-
-    /**
-     * @var array
-     */
-    protected $userConfig = [];
+    protected $config = [];
 
     /**
      * @var array
@@ -27,19 +23,17 @@ class ServiceContainer extends Container
 
     /**
      * ServiceContainer constructor.
-     * @param string $appKey
-     * @param string $appSecret
+     *
      * @param array $config
      * @throws BaseException
      */
-    public function __construct(string $appKey, string $appSecret, array $config = [])
+    public function __construct(array $config = [])
     {
         parent::__construct();
+        // 合并配置
+        $this->config = array_replace_recursive($this->config, $config);
+        // 注册服务
         $this->registerProviders($this->getProviders());
-        if (is_null($appKey) || is_null($appSecret)) {
-            throw new BaseException('Please config app key and secret');
-        }
-        $this->userConfig = array_merge(compact('appKey', 'appSecret'), $config);
     }
 
     /**
@@ -61,35 +55,75 @@ class ServiceContainer extends Container
     }
 
     /**
+     * 获取key
+     *
      * @return string
      */
     public function getAppKey()
     {
-        return $this->userConfig['appKey'];
+        return $this->getConfig('app.app_key');
     }
 
     /**
+     * 获取私钥
+     *
      * @return string
      */
     public function getAppSecret()
     {
-        return $this->userConfig['appSecret'];
+        return $this->getConfig('app.app_secret');
     }
 
     /**
+     * 获取接口版本号
+     *
      * @return string
      */
     public function getAppVersion()
     {
-        return (string)$this->getConfig()['app']['version'];
+        return (string)$this->getConfig('app.version');
     }
 
     /**
-     * @return array
+     * 获取App类型
+     *
+     * @return string
      */
-    public function getConfig()
+    public function getAppType()
     {
-        return array_replace_recursive($this->defaultConfig, $this->userConfig);
+        return (string)$this->getConfig('app.type');
+    }
+
+    /**
+     * 获取授权地址
+     *
+     * @return string
+     */
+    public function getOAuthUrl()
+    {
+        return $this->getConfig('oauth.url');
+    }
+
+    /**
+     * @return array|string
+     */
+    public function getConfig($name = '')
+    {
+        if (empty($name)) {
+            return $this->config;
+        }
+
+        $keys = explode('.', $name);
+        $config = $this->config;
+        foreach ($keys as $key_name) {
+            if (isset($config[$key_name])) {
+                $config = $config[$key_name];
+            } else {
+                return '';
+            }
+        }
+
+        return $config;
     }
 
     /**

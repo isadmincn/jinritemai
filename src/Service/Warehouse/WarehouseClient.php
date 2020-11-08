@@ -36,6 +36,6 @@ class WarehouseClient extends BaseClient
 
     public function removeAddr()
     {
-        
+
     }
 }

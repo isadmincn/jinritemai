@@ -130,6 +130,7 @@ class SkuClient extends BaseClient
 
     /**
      * 获取商品sku详情
+     * 该接口文档存在问题
      *
      * @param integer $sku_id
      * @return array

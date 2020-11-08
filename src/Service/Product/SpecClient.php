@@ -38,14 +38,14 @@ class SpecClient extends BaseClient
      * 获取规格详情
      * 1. 一个规格组下，组合总数不能超过600
      * 2. 单个规格值数量不能超过20个，比如“颜色”不能超过20种
-     * 
+     *
      * @param integer $id 规格id
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/14/63
      */
     public function specDetail(int $id) : array
     {
-        return $this->httpGet('spec/add', ['id' => $id]);
+        return $this->httpGet('spec/specDetail', ['id' => $id]);
     }
 
     /**

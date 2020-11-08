@@ -1,4 +1,5 @@
 /vendor
 /.idea
 /.vscode
-/tests/config.php
+/examples
+/config

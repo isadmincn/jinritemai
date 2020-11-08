@@ -9,11 +9,31 @@ use isadmin\Jinritemai\Service\Logistics\ServiceProvider as LogisticsServiceProv
 use isadmin\Jinritemai\Service\Order\ServiceProvider as OrderServiceProvider;
 use isadmin\Jinritemai\Service\Warehouse\ServiceProvider as WarehouseServiceProvider;
 
+use isadmin\Jinritemai\Service\Shop\Client as ShopClient;
+use isadmin\Jinritemai\Service\Product\{
+    ProductClient,
+    SkuClient as ProductSkuClient,
+    SpecClient as ProductSpecClient
+};
+use isadmin\Jinritemai\Service\Order\Client as OrderClient;
+use isadmin\Jinritemai\Service\Logistics\{AddressClient, LogisticsClient};
+use isadmin\Jinritemai\Service\AfterSale\{AfterSaleClient, RefundClient};
+
+use isadmin\Jinritemai\Enum\AppType;
+
 /**
  * Class Application
  * @package isadmin\Jinritemai
  *
- * @property ShopClient    $shop
+ * @property ShopClient           $shop
+ * @property ProductClient        $product
+ * @property ProductSkuClient     $product_sku
+ * @property ProductSpecClient    $product_spec
+ * @property OrderClient          $order
+ * @property AddressClient        $address
+ * @property LogisticsClient      $logistics
+ * @property AfterSaleClient      $after_sale
+ * @property RefundClient         $refund
  */
 class Application extends ServiceContainer
 {
@@ -34,11 +54,17 @@ class Application extends ServiceContainer
      */
     protected $defaultConfig = [
         'app' => [
+            'app_key' => '',
+            'app_secret' => '',
             'version' => '2',
+            'type'    => AppType::TOOL_APP,
         ],
         'request' => [
             'timeout' => 30.0,
             'base_uri' => 'https://openapi-fxg.jinritemai.com',
+        ],
+        'oauth' => [
+            'url' => 'https://fxg.jinritemai.com/index.html#/ffa/open/applicationAuthorize',
         ],
     ];
 
@@ -49,8 +75,8 @@ class Application extends ServiceContainer
      * @return Application
      * @throws Kernel\Exception\JinritemaiException
      */
-    public static function make(string $appKey, string $appSecret, array $config = [])
+    public static function make(array $config = [])
     {
-        return new static($appKey, $appSecret, $config);
+        return new static($config);
     }
 }

@@ -11,7 +11,7 @@ class OrderPayType
 
     // 微信支付
     const WECHAT_PAY = 1;
-    
+
     // 支付宝
     const ALIPAY = 2;
 }

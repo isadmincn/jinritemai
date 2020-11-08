@@ -66,7 +66,7 @@ class AfterSaleClient extends BaseClient
         } else {
             $options = array_pick($options, ['comment', 'evidence', 'address_id']);
         }
-        
+
         return $this->httpGet('afterSale/buyerReturn', array_merge($query, $options));
     }
 

@@ -4,8 +4,11 @@ namespace isadmin\Jinritemai\Kernel;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
+use isadmin\Jinritemai\Enum\AppType;
 use isadmin\Jinritemai\Exception\HttpRequestException;
 use isadmin\Jinritemai\Exception\JsonException;
+use isadmin\Jinritemai\Enum\GrantType;
+use isadmin\Jinritemai\Exception\BaseException;
 
 /**
  * Class BaseClient
@@ -29,6 +32,11 @@ abstract class BaseClient
     protected $httpClient;
 
     /**
+     * @var string
+     */
+    protected $code;
+
+    /**
      * BaseClient constructor.
      * @param ServiceContainer $app
      */
@@ -46,6 +54,85 @@ abstract class BaseClient
     }
 
     /**
+     * 获取授权地址
+     * @param string $redirectUri
+     * @param string $state
+     * @return string
+     */
+    public function getOAuthUrl($redirectUri, $state) : string
+    {
+        return $this->app->getOAuthUrl() . '?' . http_build_query([
+            'app_id'        => $this->app->getAppKey(),
+            'response_type' => 'code',
+            'redirect_uri'  => $redirectUri,
+            'state'         => $state,
+        ]);
+    }
+
+    /**
+     * 请求access token信息
+     * @param string $code
+     * @param array
+     */
+    public function getSelfAccessToken()
+    {
+        return $this->request('/oauth2/access_token', 'GET', [
+            'query' => [
+                'app_id'     => $this->app->getAppKey(),
+                'app_secret' => $this->app->getAppSecret(),
+                'grant_type' => GrantType::AUTHORIZATION_SELF,
+            ]
+        ]);
+    }
+
+    /**
+     * 设置授权code
+     *
+     * @param string $code
+     * @return void
+     */
+    public function setCode(string $code)
+    {
+        $this->code = $code;
+    }
+
+    /**
+     * 请求access token信息
+     * @param array
+     */
+    public function getAccessToken()
+    {
+        if (empty($this->code)) {
+            throw new BaseException('没有设置code');
+        }
+
+        return $this->request('/oauth2/access_token', 'GET', [
+            'query' => [
+                'app_id'     => $this->app->getAppKey(),
+                'app_secret' => $this->app->getAppSecret(),
+                'grant_type' => GrantType::AUTHORIZATION_CODE,
+                'code' => $this->code,
+            ]
+        ]);
+    }
+
+    /**
+     * 刷新access token信息
+     * @param string $refreshToken
+     */
+    public function getRefreshToken($refreshToken)
+    {
+        return $this->request('/oauth2/refresh_token', 'GET', [
+            'query' => [
+                'app_id'        => $this->app->getAppKey(),
+                'app_secret'    => $this->app->getAppSecret(),
+                'grant_type'    => GrantType::REFRESH_TOKEN,
+                'refresh_token' => $refreshToken
+            ]
+        ]);
+    }
+
+    /**
      * @param string $path
      * @param array $query
      * @return array
@@ -59,10 +146,16 @@ abstract class BaseClient
         $param_json = $this->buildParameterJson($query);
         $timestamp = $this->getCurrentTime();
         $v = $this->app->getAppVersion();
+        // 自有应用和工具型应用不同的获取access_token的方式
+        if ($this->app->getAppType() == AppType::SELF_APP) {
+            $access_token = $this->getSelfAccessToken()['access_token'];
+        } else {
+            $access_token = $this->getAccessToken()['access_token'];
+        }
 
         $sign = $this->makeSign(compact('app_key', 'method', 'param_json', 'timestamp', 'v'));
         return $this->request($path, 'GET', [
-            'query' => compact('app_key', 'method', 'param_json', 'timestamp', 'v', 'sign'),
+            'query' => compact('app_key', 'access_token', 'method', 'param_json', 'timestamp', 'v', 'sign'),
         ]);
     }
 
@@ -76,7 +169,7 @@ abstract class BaseClient
         $params = array_map(function ($item) {
             return (is_bool($item) || is_string($item)) ? $item : (string)$item;
         }, $params);
-        
+
         if (empty($params)) {
             return '{}';
         }
@@ -134,7 +227,7 @@ abstract class BaseClient
 
         $options ['base_uri'] = $request['base_uri'];
         $options ['timeout'] = $request['timeout'];
-print_r($options);
+
         try {
             $response = $this->getHttpClient()->request($method, $url, $options);
         } catch (GuzzleException $e) {

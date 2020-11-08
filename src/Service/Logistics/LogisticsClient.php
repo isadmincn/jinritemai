@@ -51,7 +51,7 @@ class LogisticsClient extends BaseClient
      * 修改发货物流
      * 修改已发货订单（final_status=3）的发货物流信息
      *
-     * @param integer $order_id       父订单ID，由orderList接口返回 
+     * @param integer $order_id       父订单ID，由orderList接口返回
      * @param integer $logistics_id   物流公司ID，由接口/order/logisticsCompanyList返回的物流公司列表中对应的ID
      * @param string $logistics_code  运单号
      * @param string $company         物流公司名称

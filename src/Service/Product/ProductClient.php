@@ -82,11 +82,11 @@ class ProductClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/14/59
      */
-    public function add(string $name, string $pic, string $description, int $market_price, int $discount_price, int $first_cid, 
+    public function add(string $name, string $pic, string $description, int $market_price, int $discount_price, int $first_cid,
         int $second_cid, int $third_cid, int $spec_id, int $weight, string $product_format, int $pay_type, array $options = []) : array
     {
         // 必选参数构造查询数组
-        $query = compact('name', 'pic', 'description', 'market_price', 'discount_price', 'first_cid', 
+        $query = compact('name', 'pic', 'description', 'market_price', 'discount_price', 'first_cid',
                 'second_cid', 'third_cid', 'spec_id', 'weight', 'product_format', 'pay_type');
         // 可选参数过滤无用数据
         $options = array_pick($options, [
