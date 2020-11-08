@@ -59,3 +59,5 @@ after_sale    售后
 refund        退款
 ```
 
+## 鸣谢
+[luozhenyu/JinRiTeMai](https://github.com/luozhenyu/JinRiTeMai)
