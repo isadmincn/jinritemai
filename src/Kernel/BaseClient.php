@@ -73,7 +73,7 @@ abstract class BaseClient
      * 设置授权code
      *
      * @param string $code
-     * @return void
+     * @return $this
      */
     public function setCode(string $code)
     {
