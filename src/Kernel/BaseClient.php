@@ -54,22 +54,6 @@ abstract class BaseClient
     }
 
     /**
-     * 获取授权地址
-     * @param string $redirectUri
-     * @param string $state
-     * @return string
-     */
-    public function getOAuthUrl($redirectUri, $state) : string
-    {
-        return $this->app->getOAuthUrl() . '?' . http_build_query([
-            'app_id'        => $this->app->getAppKey(),
-            'response_type' => 'code',
-            'redirect_uri'  => $redirectUri,
-            'state'         => $state,
-        ]);
-    }
-
-    /**
      * 请求access token信息
      * @param string $code
      * @param array

@@ -96,12 +96,19 @@ class ServiceContainer extends Container
 
     /**
      * 获取授权地址
+     * @param string $redirectUri
+     * @param string $state
      *
      * @return string
      */
-    public function getOAuthUrl()
+    public function getOAuthUrl($redirectUri, $state) : string
     {
-        return $this->getConfig('oauth.url');
+        return $this->getConfig('oauth.url') . '?' . http_build_query([
+            'app_id'        => $this->getAppKey(),
+            'response_type' => 'code',
+            'redirect_uri'  => $redirectUri,
+            'state'         => $state,
+        ]);
     }
 
     /**

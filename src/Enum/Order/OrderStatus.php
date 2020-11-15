@@ -1,5 +1,5 @@
 <?php
-namespace isadmin\Jinritemai\Enum;
+namespace isadmin\Jinritemai\Enum\Order;
 
 /**
  * 订单状态

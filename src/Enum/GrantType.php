@@ -6,12 +6,18 @@ namespace isadmin\Jinritemai\Enum;
  */
 class GrantType
 {
-    // 自用型应用获取access_token
+    /**
+     * 自用型应用获取access_token
+     */
     const AUTHORIZATION_SELF = 'authorization_self';
 
-    // 工具型应用获取access_token
+    /**
+     * 工具型应用获取access_token
+     */
     const AUTHORIZATION_CODE = 'authorization_code';
 
-    // 刷新access_token
+    /**
+     * 刷新access_token
+     */
     const REFRESH_TOKEN = 'refresh_token';
 }

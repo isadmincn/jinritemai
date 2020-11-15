@@ -14,9 +14,15 @@ class Client extends BaseClient
      */
     protected $name = 'order';
 
-    public function list() : array
+    public function list($start_time, $end_time, array $options = []) : array
     {
+        $query = compact('start_time', 'end_time');
+        $options = array_pick($options, ['order_status', 'order_by', 'is_desc', 'page', 'size']);
+        if (!isset($options['order_by'])) {
+            $options['order_by'] = 'create_time';
+        }
 
+        return $this->httpGet('order/list', array_merge($query, $options));
     }
 
     /**

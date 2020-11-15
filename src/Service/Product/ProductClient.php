@@ -41,12 +41,17 @@ class ProductClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/14/57
      */
-    public function list(int $page = 0, int $size = 10, array $options = []) : array
+    public function list(array $options = []) : array
     {
-        $query = compact('page', 'size');
-        $options = array_pick($options, ['status', 'check_status']);
+        $options = array_pick($options, ['status', 'check_status', 'page', 'size']);
+        if (!isset($options['page'])) {
+            $options['page'] = 0;
+        }
+        if (!isset($options['size'])) {
+            $options['size'] = 10;
+        }
 
-        return $this->httpGet('product/list', array_merge($query, $options));
+        return $this->httpGet('product/list', $options);
     }
 
     /**

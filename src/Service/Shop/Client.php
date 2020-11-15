@@ -24,4 +24,15 @@ class Client extends BaseClient
     {
         return $this->httpGet('shop/brandList');
     }
+
+    /**
+     * 当前店铺信息
+     * 官方文档并没有该接口的文档
+     *
+     * @return array
+     */
+    public function currentShop()
+    {
+        return $this->httpGet('shop/currentShop');
+    }
 }
