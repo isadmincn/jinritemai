@@ -78,6 +78,7 @@ abstract class BaseClient
     public function setCode(string $code)
     {
         $this->code = $code;
+        return $this;
     }
 
     /**
