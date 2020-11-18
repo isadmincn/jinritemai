@@ -12,7 +12,7 @@ class ServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $app)
     {
-        $app['order'] = function ($app) {
+        !isset($app['order']) && $app['order'] = function ($app) {
             return new Client($app);
         };
     }

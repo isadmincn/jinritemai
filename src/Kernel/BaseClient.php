@@ -62,23 +62,11 @@ abstract class BaseClient
     {
         return $this->request('/oauth2/access_token', 'GET', [
             'query' => [
-                'app_id'     => $this->app->getAppKey(),
-                'app_secret' => $this->app->getAppSecret(),
+                'app_id'     => $this->app->config->get('app.app_key'),
+                'app_secret' => $this->app->config->get('app.app_secret'),
                 'grant_type' => GrantType::AUTHORIZATION_SELF,
             ]
         ]);
-    }
-
-    /**
-     * 设置授权code
-     *
-     * @param string $code
-     * @return $this
-     */
-    public function setCode(string $code)
-    {
-        $this->code = $code;
-        return $this;
     }
 
     /**
@@ -93,8 +81,8 @@ abstract class BaseClient
 
         return $this->request('/oauth2/access_token', 'GET', [
             'query' => [
-                'app_id'     => $this->app->getAppKey(),
-                'app_secret' => $this->app->getAppSecret(),
+                'app_id'     => $this->app->config->get('app.app_key'),
+                'app_secret' => $this->app->config->get('app.app_secret'),
                 'grant_type' => GrantType::AUTHORIZATION_CODE,
                 'code' => $this->code,
             ]
@@ -109,8 +97,8 @@ abstract class BaseClient
     {
         return $this->request('/oauth2/refresh_token', 'GET', [
             'query' => [
-                'app_id'        => $this->app->getAppKey(),
-                'app_secret'    => $this->app->getAppSecret(),
+                'app_id'        => $this->app->config->get('app.app_key'),
+                'app_secret'    => $this->app->config->get('app.app_secret'),
                 'grant_type'    => GrantType::REFRESH_TOKEN,
                 'refresh_token' => $refreshToken
             ]
@@ -126,13 +114,13 @@ abstract class BaseClient
      */
     public function httpGet(string $path, array $query = [])
     {
-        $app_key = $this->app->getAppKey();
+        $app_key = $this->app->config->get('app.app_key');
         $method = str_replace('/', '.', $path);
         $param_json = $this->buildParameterJson($query);
         $timestamp = $this->getCurrentTime();
-        $v = $this->app->getAppVersion();
+        $v = $this->app->config->get('app.version');
         // 自有应用和工具型应用不同的获取access_token的方式
-        if ($this->app->getAppType() == AppType::SELF_APP) {
+        if ($this->app->config->get('app.type') == AppType::SELF_APP) {
             $access_token = $this->getSelfAccessToken()['access_token'];
         } else {
             $access_token = $this->getAccessToken()['access_token'];
@@ -195,7 +183,7 @@ abstract class BaseClient
         foreach ($this->sortByKey($credentials) as $k => $v) {
             $combine .= $k . $v;
         }
-        $app_secret = $this->app->getAppSecret();
+        $app_secret = $this->app->config->get('app.app_secret');
         return md5($app_secret . $combine . $app_secret);
     }
 
@@ -208,13 +196,8 @@ abstract class BaseClient
      */
     public function request($url, $method = 'GET', array $options = [])
     {
-        $request = $this->app->getConfig()['request'];
-
-        $options ['base_uri'] = $request['base_uri'];
-        $options ['timeout'] = $request['timeout'];
-
         try {
-            $response = $this->getHttpClient()->request($method, $url, $options);
+            $response = $this->app->http_client->request($method, $url, $options);
         } catch (GuzzleException $e) {
             throw new HttpRequestException;
         }
@@ -229,17 +212,6 @@ abstract class BaseClient
         return $responseArray['data'] ?? [];
     }
 
-    /**
-     * @return ClientInterface
-     */
-    public function getHttpClient()
-    {
-        if (!($this->httpClient instanceof ClientInterface)) {
-            $this->httpClient = new Client();
-        }
-        return $this->httpClient;
-    }
-
     public function __call($name, $arguments)
     {
         $path = $this->name . '/' . $name;
@@ -251,6 +223,7 @@ abstract class BaseClient
 
             }
         }
+
         return $this->httpGet($path, $query);
     }
 }

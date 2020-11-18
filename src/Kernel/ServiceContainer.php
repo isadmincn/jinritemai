@@ -1,6 +1,9 @@
 <?php
 namespace isadmin\Jinritemai\Kernel;
 
+use isadmin\Jinritemai\Kernel\Providers\ConfigServiceProvider;
+use isadmin\Jinritemai\Kernel\Providers\HttpClientServiceProvider;
+use isadmin\Jinritemai\Kernel\Providers\RequestServiceProvider;
 use isadmin\Jinritemai\Enum\AppType;
 use isadmin\Jinritemai\Exception\BaseException;
 use Pimple\Container;
@@ -8,13 +11,22 @@ use Pimple\Container;
 /**
  * Class ServiceContainer
  * @package isadmin\Jinritemai\Kernel
+ *
+ * @property \isadmin\Jinritemai\Kernel\Config        $config
+ * @property \Guzzlehttp\Client                       $http_client
+ * @property Symfony\Component\HttpFoundation\Request $request
  */
 class ServiceContainer extends Container
 {
     /**
      * @var array
      */
-    protected $config = [];
+    protected $defaultConfig = [];
+
+    /**
+     * @var array
+     */
+    protected $userConfig = [];
 
     /**
      * @var array
@@ -30,8 +42,9 @@ class ServiceContainer extends Container
     public function __construct(array $config = [])
     {
         parent::__construct();
-        // 合并配置
-        $this->config = array_replace_recursive($this->config, $config);
+
+        $this->userConfig = $config;
+
         // 注册服务
         $this->registerProviders($this->getProviders());
     }
@@ -51,86 +64,28 @@ class ServiceContainer extends Container
      */
     public function getProviders()
     {
-        return $this->providers;
+        return array_merge([
+            ConfigServiceProvider::class,
+            HttpClientServiceProvider::class,
+            RequestServiceProvider::class,
+        ], $this->providers);
     }
 
-    /**
-     * 获取key
-     *
-     * @return string
-     */
-    public function getAppKey()
+    public function getConfig()
     {
-        return $this->getConfig('app.app_key');
-    }
-
-    /**
-     * 获取私钥
-     *
-     * @return string
-     */
-    public function getAppSecret()
-    {
-        return $this->getConfig('app.app_secret');
-    }
-
-    /**
-     * 获取接口版本号
-     *
-     * @return string
-     */
-    public function getAppVersion()
-    {
-        return (string)$this->getConfig('app.version');
-    }
-
-    /**
-     * 获取App类型
-     *
-     * @return string
-     */
-    public function getAppType()
-    {
-        return (string)$this->getConfig('app.type');
-    }
-
-    /**
-     * 获取授权地址
-     * @param string $redirectUri
-     * @param string $state
-     *
-     * @return string
-     */
-    public function getOAuthUrl($redirectUri, $state) : string
-    {
-        return $this->getConfig('oauth.url') . '?' . http_build_query([
-            'app_id'        => $this->getAppKey(),
-            'response_type' => 'code',
-            'redirect_uri'  => $redirectUri,
-            'state'         => $state,
-        ]);
-    }
-
-    /**
-     * @return array|string
-     */
-    public function getConfig($name = '')
-    {
-        if (empty($name)) {
-            return $this->config;
-        }
-
-        $keys = explode('.', $name);
-        $config = $this->config;
-        foreach ($keys as $key_name) {
-            if (isset($config[$key_name])) {
-                $config = $config[$key_name];
-            } else {
-                return '';
-            }
-        }
-
-        return $config;
+        return array_replace_recursive([
+            'app' => [
+                'version' => '2',
+                'type'    => AppType::TOOL_APP,
+            ],
+            'request' => [
+                'timeout' => 5.0,
+                'base_uri' => 'https://openapi-fxg.jinritemai.com',
+            ],
+            'oauth' => [
+                'url' => 'https://fxg.jinritemai.com/index.html#/ffa/open/applicationAuthorize',
+            ]
+        ], $this->defaultConfig, $this->userConfig);
     }
 
     /**

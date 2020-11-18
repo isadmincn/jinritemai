@@ -50,25 +50,6 @@ class Application extends ServiceContainer
     ];
 
     /**
-     * @var array
-     */
-    protected $defaultConfig = [
-        'app' => [
-            'app_key' => '',
-            'app_secret' => '',
-            'version' => '2',
-            'type'    => AppType::TOOL_APP,
-        ],
-        'request' => [
-            'timeout' => 30.0,
-            'base_uri' => 'https://openapi-fxg.jinritemai.com',
-        ],
-        'oauth' => [
-            'url' => 'https://fxg.jinritemai.com/index.html#/ffa/open/applicationAuthorize',
-        ],
-    ];
-
-    /**
      * @param string $appKey
      * @param string $appSecret
      * @param array $config
@@ -78,5 +59,17 @@ class Application extends ServiceContainer
     public static function make(array $config = [])
     {
         return new static($config);
+    }
+
+    /**
+     * 设置授权code
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setCode(string $code)
+    {
+        $this->code = $code;
+        return $this;
     }
 }

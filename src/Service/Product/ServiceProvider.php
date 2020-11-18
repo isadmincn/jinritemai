@@ -12,15 +12,15 @@ class ServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $app)
     {
-        $app['product'] = function ($app) {
+        !isset($app['product']) && $app['product'] = function ($app) {
             return new ProductClient($app);
         };
 
-        $app['product_spec'] = function ($app) {
+        !isset($app['product_spec']) && $app['product_spec'] = function ($app) {
             return new SpecClient($app);
         };
 
-        $app['product_sku'] = function ($app) {
+        !isset($app['product_sku']) && $app['product_sku'] = function ($app) {
             return new SkuClient($app);
         };
     }
