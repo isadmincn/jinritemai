@@ -2,6 +2,7 @@
 namespace isadmin\Jinritemai;
 
 use isadmin\Jinritemai\Kernel\ServiceContainer;
+use isadmin\Jinritemai\Service\Auth\ServiceProvider as AuthServiceProvier;
 use isadmin\Jinritemai\Service\Shop\ServiceProvider as ShopServiceProvider;
 use isadmin\Jinritemai\Service\Product\ServiceProvider as ProductServiceProvider;
 use isadmin\Jinritemai\Service\AfterSale\ServiceProvider as AfterSaleServiceProvider;
@@ -9,6 +10,8 @@ use isadmin\Jinritemai\Service\Logistics\ServiceProvider as LogisticsServiceProv
 use isadmin\Jinritemai\Service\Order\ServiceProvider as OrderServiceProvider;
 use isadmin\Jinritemai\Service\Warehouse\ServiceProvider as WarehouseServiceProvider;
 
+use isadmin\Jinritemai\Service\Auth\Auth;
+use isadmin\Jinritemai\Service\Auth\AccessToken;
 use isadmin\Jinritemai\Service\Shop\Client as ShopClient;
 use isadmin\Jinritemai\Service\Product\{
     ProductClient,
@@ -25,6 +28,8 @@ use isadmin\Jinritemai\Enum\AppType;
  * Class Application
  * @package isadmin\Jinritemai
  *
+ * @property Auth                 $auth
+ * @property AccessToken          $access_token
  * @property ShopClient           $shop
  * @property ProductClient        $product
  * @property ProductSkuClient     $product_sku
@@ -41,6 +46,7 @@ class Application extends ServiceContainer
      * @var array
      */
     protected $providers = [
+        AuthServiceProvier::class,
         ShopServiceProvider::class,
         ProductServiceProvider::class,
         OrderServiceProvider::class,
@@ -62,14 +68,19 @@ class Application extends ServiceContainer
     }
 
     /**
-     * 设置授权code
+     * 获取授权地址
      *
-     * @param string $code
-     * @return $this
+     * @param string $redirectUri
+     * @param string $state
+     * @return string
      */
-    public function setCode(string $code)
+    public function getOAuthUrl(string $redirectUri, string $state) : string
     {
-        $this->code = $code;
-        return $this;
+        return $this->config->get('oauth_base_url') . '?' . http_build_query([
+            'app_id'        => $this->config->get('app.app_key'),
+            'response_type' => 'code',
+            'redirect_uri'  => $redirectUri,
+            'state'         => $state,
+        ]);
     }
 }

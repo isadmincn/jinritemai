@@ -32,17 +32,13 @@ abstract class BaseClient
     protected $httpClient;
 
     /**
-     * @var string
-     */
-    protected $code;
-
-    /**
      * BaseClient constructor.
      * @param ServiceContainer $app
      */
     public function __construct(ServiceContainer $app)
     {
         $this->app = $app;
+        $this->httpClient = $this->app->http_client;
     }
 
     /**
@@ -51,58 +47,6 @@ abstract class BaseClient
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * 请求access token信息
-     * @param string $code
-     * @param array
-     */
-    public function getSelfAccessToken()
-    {
-        return $this->request('/oauth2/access_token', 'GET', [
-            'query' => [
-                'app_id'     => $this->app->config->get('app.app_key'),
-                'app_secret' => $this->app->config->get('app.app_secret'),
-                'grant_type' => GrantType::AUTHORIZATION_SELF,
-            ]
-        ]);
-    }
-
-    /**
-     * 请求access token信息
-     * @param array
-     */
-    public function getAccessToken()
-    {
-        if (empty($this->code)) {
-            throw new BaseException('没有设置code');
-        }
-
-        return $this->request('/oauth2/access_token', 'GET', [
-            'query' => [
-                'app_id'     => $this->app->config->get('app.app_key'),
-                'app_secret' => $this->app->config->get('app.app_secret'),
-                'grant_type' => GrantType::AUTHORIZATION_CODE,
-                'code' => $this->code,
-            ]
-        ]);
-    }
-
-    /**
-     * 刷新access token信息
-     * @param string $refreshToken
-     */
-    public function getRefreshToken($refreshToken)
-    {
-        return $this->request('/oauth2/refresh_token', 'GET', [
-            'query' => [
-                'app_id'        => $this->app->config->get('app.app_key'),
-                'app_secret'    => $this->app->config->get('app.app_secret'),
-                'grant_type'    => GrantType::REFRESH_TOKEN,
-                'refresh_token' => $refreshToken
-            ]
-        ]);
     }
 
     /**
@@ -119,12 +63,10 @@ abstract class BaseClient
         $param_json = $this->buildParameterJson($query);
         $timestamp = $this->getCurrentTime();
         $v = $this->app->config->get('app.version');
-        // 自有应用和工具型应用不同的获取access_token的方式
-        if ($this->app->config->get('app.type') == AppType::SELF_APP) {
-            $access_token = $this->getSelfAccessToken()['access_token'];
-        } else {
-            $access_token = $this->getAccessToken()['access_token'];
-        }
+
+        // 获取授权
+        $token = $this->app->auth->getToken();
+        $access_token = $token['access_token'];
 
         $sign = $this->makeSign(compact('app_key', 'method', 'param_json', 'timestamp', 'v'));
         return $this->request($path, 'GET', [
@@ -197,10 +139,11 @@ abstract class BaseClient
     public function request($url, $method = 'GET', array $options = [])
     {
         try {
-            $response = $this->app->http_client->request($method, $url, $options);
+            $response = $this->httpClient->request($method, $url, $options);
         } catch (GuzzleException $e) {
-            throw new HttpRequestException;
+            throw new HttpRequestException($e->getMessage(), $e->getCode());
         }
+
         $responseArray = json_decode($response->getBody(), true);
 
         $errno = $responseArray['err_no'] ?? $responseArray['errno'] ?? 0;
