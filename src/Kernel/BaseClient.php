@@ -65,8 +65,7 @@ abstract class BaseClient
         $v = $this->app->config->get('app.version');
 
         // 获取授权
-        $token = $this->app->access_token->getToken();
-        $access_token = $token['access_token'];
+        list($access_token, $refresh_token) = $this->app->access_token->getToken();
 
         $sign = $this->makeSign(compact('app_key', 'method', 'param_json', 'timestamp', 'v'));
 

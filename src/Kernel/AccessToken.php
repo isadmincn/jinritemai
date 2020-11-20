@@ -24,50 +24,53 @@ abstract class AccessToken implements AccessTokenInterface
     }
 
     /**
+     * 获取AccessToken
+     *
      * @return array
      */
-    public function getToken(): array
+    public function getToken() : array
     {
-        $path = $this->getPath();
-        $credentials = $this->getCredentials();
+        return $this->requestToken();
+    }
 
+    /**
+     * 请求AccessToken和RefreshToken
+     *
+     * @return array
+     */
+    protected function requestToken() : array
+    {
         try {
-            $response = $this->app->http_client->get($path, [
-                'query' => $credentials
+            $resp = $this->app->http_client->get($this->getPath(), [
+                'query' => $this->getCredentials()
             ]);
         } catch (GuzzleException $e) {
             throw new HttpRequestException($e->getMessage(), $e->getCode());
         }
 
-        $responseArray = json_decode($response->getBody()->getContents(), true);
+        $respArr = json_decode($resp->getBody()->getContents(), true);
 
-        $errno = $responseArray['err_no'] ?? $responseArray['errno'] ?? 0;
-        $message = $responseArray['message'];
+        $errno = $respArr['err_no'] ?? $respArr['errno'] ?? 0;
+        $message = $respArr['message'];
         if ($errno !== 0) {
             throw new HttpRequestException($message, $errno);
         }
 
-        return $responseArray['data'] ?? [];
+        return [
+            $respArr['data']['access_token'] ?? '',
+            $respArr['data']['refresh_token'] ?? '',
+        ];
     }
 
     /**
-     * @return \EasyWeChat\Kernel\Contracts\AccessTokenInterface
-     */
-    public function refresh(): self
-    {
-        $this->getToken();
-        return $this;
-    }
-
-    /**
-     * request path
+     * 请求路径
      *
      * @return string
      */
     abstract protected function getPath() : string;
 
     /**
-     * Credential for get token.
+     * 请求凭据
      *
      * @return array
      */
