@@ -2,7 +2,7 @@
 namespace isadmin\Jinritemai;
 
 use isadmin\Jinritemai\Kernel\ServiceContainer;
-use isadmin\Jinritemai\Service\Auth\ServiceProvider as AuthServiceProvier;
+use isadmin\Jinritemai\Service\Auth\ServiceProvider as AuthServiceProvider;
 use isadmin\Jinritemai\Service\Shop\ServiceProvider as ShopServiceProvider;
 use isadmin\Jinritemai\Service\Product\ServiceProvider as ProductServiceProvider;
 use isadmin\Jinritemai\Service\AfterSale\ServiceProvider as AfterSaleServiceProvider;
@@ -10,8 +10,6 @@ use isadmin\Jinritemai\Service\Logistics\ServiceProvider as LogisticsServiceProv
 use isadmin\Jinritemai\Service\Order\ServiceProvider as OrderServiceProvider;
 use isadmin\Jinritemai\Service\Warehouse\ServiceProvider as WarehouseServiceProvider;
 
-use isadmin\Jinritemai\Service\Auth\Auth;
-use isadmin\Jinritemai\Service\Auth\AccessToken;
 use isadmin\Jinritemai\Service\Shop\Client as ShopClient;
 use isadmin\Jinritemai\Service\Product\{
     ProductClient,
@@ -21,6 +19,7 @@ use isadmin\Jinritemai\Service\Product\{
 use isadmin\Jinritemai\Service\Order\Client as OrderClient;
 use isadmin\Jinritemai\Service\Logistics\{AddressClient, LogisticsClient};
 use isadmin\Jinritemai\Service\AfterSale\{AfterSaleClient, RefundClient};
+use isadmin\Jinritemai\Service\Auth\{AccessToken, RefreshToken};
 
 use isadmin\Jinritemai\Enum\AppType;
 
@@ -28,8 +27,8 @@ use isadmin\Jinritemai\Enum\AppType;
  * Class Application
  * @package isadmin\Jinritemai
  *
- * @property Auth                 $auth
  * @property AccessToken          $access_token
+ * @property RefreshToken         $refresh_token
  * @property ShopClient           $shop
  * @property ProductClient        $product
  * @property ProductSkuClient     $product_sku
@@ -46,7 +45,7 @@ class Application extends ServiceContainer
      * @var array
      */
     protected $providers = [
-        AuthServiceProvier::class,
+        AuthServiceProvider::class,
         ShopServiceProvider::class,
         ProductServiceProvider::class,
         OrderServiceProvider::class,
@@ -56,15 +55,15 @@ class Application extends ServiceContainer
     ];
 
     /**
-     * @param string $appKey
-     * @param string $appSecret
+     * @param string $appkey
+     * @param string $appsecret
      * @param array $config
      * @return Application
      * @throws Kernel\Exception\JinritemaiException
      */
-    public static function make(array $config = [])
+    public static function make(string $appkey, string $appsecret, array $config = [])
     {
-        return new static($config);
+        return new static($appkey, $appsecret, $config);
     }
 
     /**

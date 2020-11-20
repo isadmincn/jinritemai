@@ -1,12 +1,12 @@
 <?php
 namespace isadmin\Jinritemai\Exception;
 
-use Exception;
+use Exception as BaseException;
 
 /**
- * Class BaseException
+ * Class Exception
  * @package isadmin\Jinritemai\Exception
  */
-class BaseException extends Exception
+class Exception extends BaseException
 {
 }

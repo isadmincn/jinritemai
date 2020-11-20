@@ -58,17 +58,18 @@ abstract class BaseClient
      */
     public function httpGet(string $path, array $query = [])
     {
-        $app_key = $this->app->config->get('app.app_key');
+        $app_key = $this->app->config->get('app_key');
         $method = str_replace('/', '.', $path);
         $param_json = $this->buildParameterJson($query);
         $timestamp = $this->getCurrentTime();
         $v = $this->app->config->get('app.version');
 
         // 获取授权
-        $token = $this->app->auth->getToken();
+        $token = $this->app->access_token->getToken();
         $access_token = $token['access_token'];
 
         $sign = $this->makeSign(compact('app_key', 'method', 'param_json', 'timestamp', 'v'));
+
         return $this->request($path, 'GET', [
             'query' => compact('app_key', 'access_token', 'method', 'param_json', 'timestamp', 'v', 'sign'),
         ]);
@@ -125,7 +126,8 @@ abstract class BaseClient
         foreach ($this->sortByKey($credentials) as $k => $v) {
             $combine .= $k . $v;
         }
-        $app_secret = $this->app->config->get('app.app_secret');
+        $app_secret = $this->app->config->get('app_secret');
+
         return md5($app_secret . $combine . $app_secret);
     }
 
@@ -144,7 +146,7 @@ abstract class BaseClient
             throw new HttpRequestException($e->getMessage(), $e->getCode());
         }
 
-        $responseArray = json_decode($response->getBody(), true);
+        $responseArray = json_decode($response->getBody()->getContents(), true);
 
         $errno = $responseArray['err_no'] ?? $responseArray['errno'] ?? 0;
         $message = $responseArray['message'];

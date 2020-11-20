@@ -2,9 +2,9 @@
 namespace isadmin\Jinritemai\Exception;
 
 /**
- * Class HttpRequestException
+ * Class RuntimeException
  * @package isadmin\Jinritemai\Exception
  */
-class HttpRequestException extends Exception
+class RuntimeException extends Exception
 {
 }

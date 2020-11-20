@@ -1,5 +1,7 @@
 # 抖音小店SDK
 
+[参考文档](./docs/index.md)
+
 ## 安装
 ```
 composer require isadmin/jinritemai

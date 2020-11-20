@@ -21,12 +21,22 @@ class ServiceContainer extends Container
     /**
      * @var array
      */
-    protected $defaultConfig = [];
+    protected $defaultConfig = [
+        'app' => [
+            'version' => '2',
+            'type'    => AppType::SELF_APP,
+        ],
+        'request' => [
+            'timeout' => 5.0,
+            'base_uri' => 'https://openapi-fxg.jinritemai.com',
+        ],
+        'oauth_base_url' => 'https://fxg.jinritemai.com/index.html#/ffa/open/applicationAuthorize',
+    ];
 
     /**
      * @var array
      */
-    protected $userConfig = [];
+    protected $config = [];
 
     /**
      * @var array
@@ -34,16 +44,26 @@ class ServiceContainer extends Container
     protected $providers = [];
 
     /**
+     * 授权码
+     *
+     * @var string
+     */
+    protected $code;
+
+    /**
      * ServiceContainer constructor.
      *
+     * @param string $app_key
+     * @param string $app_secret
      * @param array $config
      * @throws BaseException
      */
-    public function __construct(array $config = [])
+    public function __construct(string $app_key, string $app_secret, array $config = [])
     {
         parent::__construct();
 
-        $this->userConfig = $config;
+        $config = array_merge($config, compact('app_key', 'app_secret'));
+        $this->config = array_replace_recursive($this->defaultConfig, $config);
 
         // 注册服务
         $this->registerProviders($this->getProviders());
@@ -71,21 +91,39 @@ class ServiceContainer extends Container
         ], $this->providers);
     }
 
-    public function getConfig()
+    /**
+     * 获得完整配置
+     *
+     * @return array
+     */
+    public function getConfig() : array
     {
-        return array_replace_recursive([
-            'app' => [
-                'version' => '2',
-                'type'    => AppType::TOOL_APP,
-            ],
-            'request' => [
-                'timeout' => 5.0,
-                'base_uri' => 'https://openapi-fxg.jinritemai.com',
-            ],
-            'oauth' => [
-                'url' => 'https://fxg.jinritemai.com/index.html#/ffa/open/applicationAuthorize',
-            ]
-        ], $this->defaultConfig, $this->userConfig);
+        return $this->config;
+    }
+
+    /**
+     * 设置授权码
+     *
+     * @param string $code
+     * @return self
+     */
+    public function setCode(string $code) : self
+    {
+        if (isset($this->config['app']['type']) && $this->config['app']['type'] == AppType::TOOL_APP) {
+            $this->code = $code;
+        }
+
+        return $this;
+    }
+
+    /**
+     * 获取授权码
+     *
+     * @return string
+     */
+    public function getCode() : string
+    {
+        return $this->code;
     }
 
     /**

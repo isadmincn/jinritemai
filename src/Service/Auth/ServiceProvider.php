@@ -12,12 +12,12 @@ class ServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $app)
     {
-        !isset($app['access_token']) && $app['access_token'] = function ($app) {
-            return new AccessToken($app);
+        !isset($app['refresh_token']) && $app['refresh_token'] = function ($app) {
+            return new RefreshToken($app);
         };
 
-        !isset($app['auth']) && $app['auth'] = function ($app) {
-            return new Auth($app);
+        !isset($app['access_token']) && $app['access_token'] = function ($app) {
+            return new AccessToken($app);
         };
     }
 }
