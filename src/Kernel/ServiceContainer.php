@@ -123,7 +123,7 @@ class ServiceContainer extends Container
      */
     public function getCode() : string
     {
-        return $this->code;
+        return $this->code ?? '';
     }
 
     /**
