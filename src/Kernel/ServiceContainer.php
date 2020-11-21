@@ -22,6 +22,8 @@ class ServiceContainer extends Container
      * @var array
      */
     protected $defaultConfig = [
+        'app_key' => '',
+        'app_secret' => '',
         'app' => [
             'version' => '2',
             'type'    => AppType::SELF_APP,
@@ -58,11 +60,10 @@ class ServiceContainer extends Container
      * @param array $config
      * @throws BaseException
      */
-    public function __construct(string $app_key, string $app_secret, array $config = [])
+    public function __construct(array $config = [])
     {
         parent::__construct();
 
-        $config = array_merge($config, compact('app_key', 'app_secret'));
         $this->config = array_replace_recursive($this->defaultConfig, $config);
 
         // 注册服务
@@ -96,7 +97,7 @@ class ServiceContainer extends Container
      *
      * @return array
      */
-    public function getConfig() : array
+    public function getConfig()
     {
         return $this->config;
     }

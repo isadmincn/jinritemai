@@ -55,15 +55,13 @@ class Application extends ServiceContainer
     ];
 
     /**
-     * @param string $appkey
-     * @param string $appsecret
      * @param array $config
      * @return Application
      * @throws Kernel\Exception\JinritemaiException
      */
-    public static function make(string $appkey, string $appsecret, array $config = [])
+    public static function make(array $config = [])
     {
-        return new static($appkey, $appsecret, $config);
+        return new static($config);
     }
 
     /**
