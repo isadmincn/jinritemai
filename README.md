@@ -14,9 +14,9 @@ composer require isadmin/jinritemai
 use isadmin\Jinritemai\Enum\AppType;
 
 return [
+    'app_key' => '',
+    'app_secret' => '',
     'app' => [
-        'app_key' => '',
-        'app_secret' => '',
         // 默认
         'version' => '2',
         // 应用类型，AppType::SELF_APP为自用型应用，AppType::TOOL_APP为工具型应用
@@ -37,7 +37,6 @@ return [
 use isadmin\Jinritemai\Application;
 
 $app = new Application($config);
-print_r($app->getConfig());
 ```
 
 ## 访问Api
@@ -62,5 +61,5 @@ refund        退款
 ```
 
 ## 鸣谢
-[luozhenyu/JinRiTeMai](https://github.com/luozhenyu/JinRiTeMai)
-[easywechat](https://github.com/overtrue/wechat)
++ [luozhenyu/JinRiTeMai](https://github.com/luozhenyu/JinRiTeMai)
++ [easywechat](https://github.com/overtrue/wechat)
