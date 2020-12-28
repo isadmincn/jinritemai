@@ -28,11 +28,11 @@ class Client extends BaseClient
     /**
      * 获取订单详情
      *
-     * @param integer $order_id   父订单，订单号后面需要加大写字母"A"
+     * @param string $order_id   父订单，订单号后面需要加大写字母"A"
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/15/68
      */
-    public function detail(int $order_id) : array
+    public function detail(string $order_id) : array
     {
         return $this->httpGet('order/detail', [
             'order_id' => $order_id,
@@ -43,11 +43,11 @@ class Client extends BaseClient
      * 确认货到付款订单
      * 当货到付款订单是待确认状态（final_status=1）时，可调此接口确认订单。确认后，订单状态更新为“备货中”
      *
-     * @param integer $order_id   父订单id，由orderList接口返回
+     * @param string $order_id   父订单id，由orderList接口返回
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/15/69
      */
-    public function stockUp(int $order_id) : array
+    public function stockUp(string $order_id) : array
     {
         return $this->httpGet('order/stockUp', [
             'order_id' => $order_id,
@@ -58,12 +58,12 @@ class Client extends BaseClient
      * 取消订单
      * 取消待确认或备货中的货到付款订单（final_status=1或2）
      *
-     * @param integer $order_id  父订单ID，由orderList接口返回
+     * @param string $order_id  父订单ID，由orderList接口返回
      * @param string $reason     取消订单的原因
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/15/72
      */
-    public function cancel(int $order_id, string $reason) : array
+    public function cancel(string $order_id, string $reason) : array
     {
         return $this->httpGet('order/cancel', compact('order_id', 'reason'));
     }
