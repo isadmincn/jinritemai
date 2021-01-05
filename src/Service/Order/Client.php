@@ -28,11 +28,11 @@ class Client extends BaseClient
     /**
      * 获取订单详情
      *
-     * @param integer $order_id   父订单，订单号后面需要加大写字母"A"
+     * @param string $order_id   父订单，订单号后面需要加大写字母"A"
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/15/68
      */
-    public function detail(int $order_id) : array
+    public function detail($order_id) : array
     {
         return $this->httpGet('order/detail', [
             'order_id' => $order_id,
