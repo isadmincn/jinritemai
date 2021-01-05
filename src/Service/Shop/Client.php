@@ -35,4 +35,18 @@ class Client extends BaseClient
     {
         return $this->httpGet('shop/currentShop');
     }
+
+    /**
+     * 获取店铺后台供商家发布商品的类目
+     *
+     * @param integer $cid
+     * @return array
+     * @link https://op.jinritemai.com/docs/api-docs/13/234
+     */
+    public function getShopCategory(int $cid = 0)
+    {
+        return $this->httpGet('shop/getShopCategory', [
+            'cid' => $cid
+        ]);
+    }
 }
