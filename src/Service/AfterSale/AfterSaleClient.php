@@ -47,7 +47,7 @@ class AfterSaleClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/17/90
      */
-    public function buyerReturn(string $order_id, int $type, int $sms_id, array $options = []) : array
+    public function buyerReturn($order_id, $type, $sms_id, array $options = []) : array
     {
         $query = [
             'order_id' => $order_id,
@@ -81,7 +81,7 @@ class AfterSaleClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/17/91
      */
-    public function firmReceive(string $order_id, int $type, array $options = []) : array
+    public function firmReceive($order_id, $type, array $options = []) : array
     {
         $query = [
             'order_id' => $order_id,
@@ -106,7 +106,7 @@ class AfterSaleClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/17/92
      */
-    public function uploadCompensation(string $order_id, string $comment, string $evidence) : array
+    public function uploadCompensation($order_id, $comment, $evidence) : array
     {
         return $this->httpGet('afterSale/uploadCompensation', [
             'order_id' => $order_id,
@@ -124,7 +124,7 @@ class AfterSaleClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/17/93
      */
-    public function addOrderRemark(string $order_id, string $remark) : array
+    public function addOrderRemark($order_id, $remark) : array
     {
         return $this->httpGet('afterSale/addOrderRemark', [
             'order_id' => $order_id,
@@ -143,7 +143,7 @@ class AfterSaleClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/17/96
      */
-    public function refundProcessDetail(string $order_id) : array
+    public function refundProcessDetail($order_id) : array
     {
         return $this->httpGet('afterSale/refundProcessDetail', [
             'order_id' => $order_id,
@@ -161,7 +161,7 @@ class AfterSaleClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/17/131
      */
-    public function buyerRefund(string $order_id, int $type, string $evidence, string $comment = '') : array
+    public function buyerRefund($order_id, $type, $evidence, $comment = '') : array
     {
         $query = [
             'order_id' => $order_id,

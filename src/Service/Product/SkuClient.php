@@ -32,7 +32,7 @@ class SkuClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/14/81
      */
-    public function add(int $product_id, int $spec_id, string $spec_detail_ids,  int $stock_num, int $price, array $options = []) : array
+    public function add($product_id, $spec_id, $spec_detail_ids,  $stock_num, $price, array $options = []) : array
     {
         $query = compact('product_id', 'spec_id', 'spec_detail_ids', 'stock_num', 'price');
         $options = array_pick($options, ['out_sku_id', 'settlement_price', 'code', 'out_warehouse_id', 'supplier_id']);
@@ -58,7 +58,7 @@ class SkuClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/14/83
      */
-    public function addAll(int $product_id, int $spec_id, string $spec_detail_ids,  int $stock_num, int $price, array $options = []) : array
+    public function addAll($product_id, $spec_id, $spec_detail_ids, $stock_num, $price, array $options = []) : array
     {
         $query = compact('product_id', 'spec_id', 'spec_detail_ids', 'stock_num', 'price');
         $options = array_pick($options, ['out_sku_id', 'settlement_price', 'code', 'out_warehouse_id', 'supplier_id']);
@@ -74,7 +74,7 @@ class SkuClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/14/82
      */
-    public function list(int $product_id) : array
+    public function list($product_id) : array
     {
         return $this->httpGet('sku/list', [
             'product_id' => $product_id,
@@ -90,7 +90,7 @@ class SkuClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/14/84
      */
-    public function editPrice(int $product_id, int $sku_id, int $price) : array
+    public function editPrice($product_id, $sku_id, $price) : array
     {
         return $this->httpGet('sku/editPrice', compact('product_id', 'sku_id', 'price'));
     }
@@ -106,7 +106,7 @@ class SkuClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/14/85
      */
-    public function syncStock(int $product_id, int $sku_id, int $stock_num, array $options = []) : array
+    public function syncStock($product_id, $sku_id, $stock_num, array $options = []) : array
     {
         $query = compact('product_id', 'sku_id', 'stock_num');
         $options = array_pick($options, ['out_warehouse_id', 'supplier_id', 'incremental', 'idempotent_id']);
@@ -123,7 +123,7 @@ class SkuClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/14/86
      */
-    public function editCode(int $product_id, int $sku_id, string $code) : array
+    public function editCode($product_id, $sku_id, $code) : array
     {
         return $this->httpGet('sku/editCode', compact('product_id', 'sku_id', 'code'));
     }
@@ -136,7 +136,7 @@ class SkuClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/14/104
      */
-    public function detail(int $sku_id) : array
+    public function detail($sku_id) : array
     {
         return $this->httpGet('sku/detail', [
             'sku_id' => $sku_id,

@@ -24,7 +24,7 @@ class SpecClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/14/62
      */
-    public function add(string $specs, string $name = null) : array
+    public function add($specs, string $name = null) : array
     {
         $query = ['specs' => $specs];
         if (!empty($name)) {
@@ -43,7 +43,7 @@ class SpecClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/14/63
      */
-    public function specDetail(int $id) : array
+    public function specDetail($id) : array
     {
         return $this->httpGet('spec/specDetail', ['id' => $id]);
     }
@@ -66,7 +66,7 @@ class SpecClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/14/65
      */
-    public function del(int $id) : array
+    public function del($id) : array
     {
         return $this->httpGet('spec/del', ['id' => $id]);
     }

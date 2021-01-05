@@ -32,11 +32,7 @@ class Client extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/15/68
      */
-<<<<<<< HEAD
     public function detail($order_id) : array
-=======
-    public function detail(string $order_id) : array
->>>>>>> 54c49bac65ca81e9c84a8b06db76f1c28931be2c
     {
         return $this->httpGet('order/detail', [
             'order_id' => $order_id,
@@ -51,7 +47,7 @@ class Client extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/15/69
      */
-    public function stockUp(string $order_id) : array
+    public function stockUp($order_id) : array
     {
         return $this->httpGet('order/stockUp', [
             'order_id' => $order_id,

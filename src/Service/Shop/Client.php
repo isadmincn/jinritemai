@@ -43,7 +43,7 @@ class Client extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/13/234
      */
-    public function getShopCategory(int $cid = 0)
+    public function getShopCategory($cid = 0)
     {
         return $this->httpGet('shop/getShopCategory', [
             'cid' => $cid

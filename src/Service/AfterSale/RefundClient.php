@@ -42,7 +42,7 @@ class RefundClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/17/87
      */
-    public function shopRefund(string $order_id, int $type, array $options = []) : array
+    public function shopRefund($order_id, $type, array $options = []) : array
     {
         $query = compact('order_id', 'type');
         $options = array_pick($options, ['logistics_id', 'logistics_code']);

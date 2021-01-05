@@ -24,7 +24,7 @@ class ProductClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/14/56
      */
-    public function detail(int $product_id, string $show_draft = 'false') : array
+    public function detail($product_id, $show_draft = 'false') : array
     {
         return $this->httpGet('product/detail', [
             'product_id' => $product_id,
@@ -61,7 +61,7 @@ class ProductClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/14/58
      */
-    public function getGoodsCategory(int $cid = 0) : array
+    public function getGoodsCategory($cid = 0) : array
     {
         return $this->httpGet('product/getGoodsCategory', [
             'cid' => $cid,
@@ -87,8 +87,8 @@ class ProductClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/14/59
      */
-    public function add(string $name, string $pic, string $description, int $market_price, int $discount_price, int $first_cid,
-        int $second_cid, int $third_cid, int $spec_id, int $weight, string $product_format, int $pay_type, array $options = []) : array
+    public function add($name, $pic, $description, $market_price, $discount_price, $first_cid,
+        $second_cid, $third_cid, $spec_id, $weight, $product_format, $pay_type, array $options = []) : array
     {
         // 必选参数构造查询数组
         $query = compact('name', 'pic', 'description', 'market_price', 'discount_price', 'first_cid',
@@ -111,7 +111,7 @@ class ProductClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/14/60
      */
-    public function edit(int $product_id, array $options = []) : array
+    public function edit($product_id, array $options = []) : array
     {
         $options = array_pick($options, [
             'name', 'spec_id', 'pic', 'description', 'first_cid', 'second_cid', 'third_cid',
@@ -130,7 +130,7 @@ class ProductClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/14/61
      */
-    public function del(int $product_id) : array
+    public function del($product_id) : array
     {
         return $this->httpGet('product/del', [
             'product_id' => $product_id,
@@ -147,7 +147,7 @@ class ProductClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/14/94
      */
-    public function getCateProperty(int $first_cid, int $second_cid, int $third_cid) : array
+    public function getCateProperty($first_cid, $second_cid, $third_cid) : array
     {
         return $this->httpGet('product/getCateProperty', compact('first_cid', 'second_cid', 'third_cid'));
     }

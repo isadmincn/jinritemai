@@ -36,7 +36,7 @@ class LogisticsClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/16/77
      */
-    public function add(int $order_id, int $logistics_id, string $logistics_code, string $company = '') : array
+    public function add($order_id, $logistics_id, $logistics_code, $company = '') : array
     {
         if (empty($company)) {
             $query = compact('order_id', 'logistics_id', 'logistics_code');
@@ -58,7 +58,7 @@ class LogisticsClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/16/79
      */
-    public function edit(int $order_id, int $logistics_id, string $logistics_code, string $company = '') : array
+    public function edit($order_id, $logistics_id, $logistics_code, $company = '') : array
     {
         if (empty($company)) {
             $query = compact('order_id', 'logistics_id', 'logistics_code');

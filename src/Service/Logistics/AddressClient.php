@@ -32,7 +32,7 @@ class AddressClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/16/102
      */
-    public function cityList(int $province_id) : array
+    public function cityList($province_id) : array
     {
         return $this->httpGet('address/cityList', [
             'province_id' => $province_id,
@@ -46,7 +46,7 @@ class AddressClient extends BaseClient
      * @return array
      * @link https://op.jinritemai.com/docs/api-docs/16/103
      */
-    public function areaList(int $city_id) : array
+    public function areaList($city_id) : array
     {
         return $this->httpGet('address/areaList', [
             'city_id' => $city_id,
